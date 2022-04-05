@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  user_balance:
+    build: ./
+    environment:
+      - 'DB_HOST=db'
+      - 'DB_PORT=5432'
+      - 'DB_USER=userbalance'
+      - 'DB_PASSWORD=password'
+      - 'DB_NAME=userbalance'
+      - 'DB_SSLMODE=disable'
+      - 'API_ADDRESS=:8080'
+      - 'CURRENCY_API_ACCESS_KEY=<your token>'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - dbinit
+
+  db:
+    restart: always
+    image: postgres:latest
+    environment:
+      - 'POSTGRES_USER=userbalance'
+      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_DB=userbalance'
+    ports:
+      - "5432:5432"
+
+  dbinit:
+    image: postgres:latest
+    depends_on:
+      - db
+    restart: "no"
+    environment:
+      - 'PGPASSWORD=password'
+    volumes:
+      - ${PWD}/sql:/sql
+    entrypoint: >
+      bash -c 'until pg_isready -p 5432 -h db -U userbalance;
+      do
+        echo "Waiting for postgres"
+        sleep 3;
+      done
+      && psql -p 5432 -W -h db -U userbalance -d userbalance -f "/sql/create_table.sql"'

@@ -1,0 +1,13 @@
+# Ignore service files added by the operating system
+.DS_Store
+
+# Ignore configuration and temporary files of editors
+.idea
+
+# Ignore development-installed dependencies
+/vendor
+
+# Ignore project build results
+user_balance
+
+/configs/config.yaml

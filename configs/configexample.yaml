@@ -1,0 +1,14 @@
+api:
+  address: ":8080"
+
+database:
+  host: "localhost"
+  port: "5432"
+  user: "userbalance"
+  password: "password"
+  name: "userbalance"
+  sslmode: "disable"
+
+free_currency_api:
+  url: "https://freecurrencyapi.net/api/v2/latest"
+  access_key: "access_key"
